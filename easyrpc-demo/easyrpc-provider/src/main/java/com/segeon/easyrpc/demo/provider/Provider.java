@@ -10,11 +10,11 @@ public class Provider {
     public static void main(String[] args) {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.setName("demo-provider");
-        applicationConfig.setPort(1121);
+        applicationConfig.setPort(1123);
         RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setSchema("etcd");
         registryConfig.setIp("localhost");
-        registryConfig.setPort(1121);
-        registryConfig.setSchema("mock");
+        registryConfig.setPort(2379);
         applicationConfig.setRegistryConfig(registryConfig);
         applicationConfig.init();
         ServiceConfig serviceConfig = new ServiceConfig(applicationConfig);

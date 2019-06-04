@@ -22,5 +22,10 @@
             <artifactId>easyrpc-facade</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.segeon</groupId>
+            <artifactId>easycrpc-etcd</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

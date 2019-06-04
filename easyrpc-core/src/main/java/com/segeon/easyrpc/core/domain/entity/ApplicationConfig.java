@@ -1,14 +1,15 @@
 package com.segeon.easyrpc.core.domain.entity;
 
 import com.google.common.base.Preconditions;
-import com.segeon.easyrpc.core.domain.entity.impl.ChannelManagerImpl;
-import com.segeon.easyrpc.core.domain.entity.impl.RandomLoadBalancePolicy;
-import com.segeon.easyrpc.core.domain.entity.impl.ServiceManagerImpl;
-import com.segeon.easyrpc.core.domain.entity.impl.ServiceRegistryImpl;
+import com.segeon.easyrpc.core.domain.entity.impl.*;
+import com.segeon.easyrpc.core.domain.exception.RPCServerException;
 import com.segeon.easyrpc.core.netty.NettyRPCClient;
+import com.segeon.easyrpc.core.utils.IpUtil;
 import com.segeon.easyrpc.core.utils.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.net.SocketException;
 
 
 public class ApplicationConfig {
@@ -17,6 +18,8 @@ public class ApplicationConfig {
     @Getter
     @Setter
     private String name;
+    @Getter
+    private String localIp;
     @Getter
     @Setter
     private int port;
@@ -40,8 +43,14 @@ public class ApplicationConfig {
             Preconditions.checkNotNull(registryConfig);
             Preconditions.checkState(StringUtils.hasText(registryConfig.getIp()), "注册中心ip不能为空");
             Preconditions.checkState(registryConfig.getPort() > 0, "注册中心端口号必须大于0");
+            try {
+                this.localIp = IpUtil.getRealIp();
+            } catch (SocketException e) {
+                throw new RPCServerException("获取本机ip异常！");
+            }
             loadBalancePolicy = new RandomLoadBalancePolicy();
-            serviceRegistry = new ServiceRegistryImpl(this);
+            serviceRegistry = new ServiceRegistryResolver();
+            serviceRegistry.init(this);
             serviceManager = new ServiceManagerImpl(this);
             channelManager = new ChannelManagerImpl(this);
             rpcClient = new NettyRPCClient(this);

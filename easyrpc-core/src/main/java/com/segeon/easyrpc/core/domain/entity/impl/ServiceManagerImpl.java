@@ -1,11 +1,8 @@
 package com.segeon.easyrpc.core.domain.entity.impl;
 
 import com.segeon.easyrpc.core.domain.entity.*;
-import com.segeon.easyrpc.core.domain.exception.RPCServerException;
 import com.segeon.easyrpc.core.netty.NettyRPCServer;
-import com.segeon.easyrpc.core.utils.IpUtil;
 
-import java.net.SocketException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServiceManagerImpl implements ServiceManager {
@@ -17,11 +14,7 @@ public class ServiceManagerImpl implements ServiceManager {
     public ServiceManagerImpl(ApplicationConfig config) {
         this.applicationConfig = config;
         this.services = new ConcurrentHashMap<>();
-        try {
-            this.localIp = IpUtil.getRealIp();
-        } catch (SocketException e) {
-            throw new RPCServerException("获取本机ip异常！");
-        }
+        this.localIp = config.getLocalIp();
         this.server = new NettyRPCServer(applicationConfig);
         this.server.initialize();
     }
@@ -38,7 +31,7 @@ public class ServiceManagerImpl implements ServiceManager {
 
     @Override
     public void register(RemotingService remotingService) {
-        services.put(RemotingService.genServiceKey(remotingService), remotingService);
+        services.put(remotingService.getKey(), remotingService);
         applicationConfig.getServiceRegistry().register(remotingService);
     }
 
@@ -46,11 +39,11 @@ public class ServiceManagerImpl implements ServiceManager {
     public void unregister(RemotingService remotingService) {
         applicationConfig.getServiceRegistry().unRegister(remotingService);
         //TODO: 实现优雅关机
-        services.remove(RemotingService.genServiceKey(remotingService));
+        services.remove(remotingService.getKey());
     }
 
     @Override
     public RemotingService lookup(String interfaceName, String group, String version) {
-        return services.get(RemotingService.genServiceKey(interfaceName, group, version));
+        return services.get(ServiceKey.genKey(interfaceName, group, version));
     }
 }

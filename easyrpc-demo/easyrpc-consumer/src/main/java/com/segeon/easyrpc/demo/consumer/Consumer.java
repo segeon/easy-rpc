@@ -9,18 +9,19 @@ import com.segeon.easyrpc.demo.facade.HelloResponse;
 import com.segeon.easyrpc.demo.facade.HelloService;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class Consumer {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.setName("demo-consumer");
         applicationConfig.setPort(1122);
         RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setSchema("etcd");
         registryConfig.setIp("localhost");
-        registryConfig.setPort(1121);
-        registryConfig.setSchema("mock");
+        registryConfig.setPort(2379);
         applicationConfig.setRegistryConfig(registryConfig);
         applicationConfig.init();
         ReferenceConfig<HelloService> referenceConfig = new ReferenceConfig(applicationConfig);
@@ -40,5 +41,6 @@ public class Consumer {
         }
         stopwatch.stop();
         log.info("avg cost: {}", stopwatch.elapsed(TimeUnit.MILLISECONDS) * 1.0 / cnt);
+        System.in.read();
     }
 }
