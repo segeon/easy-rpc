@@ -5,12 +5,12 @@ import com.segeon.easyrpc.core.domain.entity.RegistryConfig;
 import com.segeon.easyrpc.core.domain.entity.ServiceConfig;
 import com.segeon.easyrpc.demo.facade.HelloService;
 
-public class Provider {
+public class Provider2 {
 
     public static void main(String[] args) {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.setName("demo-provider");
-        applicationConfig.setPort(1122);
+        applicationConfig.setPort(1123);
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setSchema("etcd");
         registryConfig.setIp("localhost");

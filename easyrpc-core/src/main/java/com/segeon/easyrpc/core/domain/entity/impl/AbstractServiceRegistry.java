@@ -46,10 +46,10 @@ public abstract class AbstractServiceRegistry implements ServiceRegistry {
 
     abstract protected void doUnsubscribe(ServiceKey config);
 
-    protected void onEndpointsChange(ServiceKey serviceKey, List<Endpoint> endpoints) {
+    protected void onEndpointsChange(ServiceKey serviceKey, List<Endpoint> newEndpoints, List<Endpoint> deletedEndpoints) {
         EndpointChangeListener listener = listenerMap.get(serviceKey);
         if (listener != null) {
-            listener.notify(serviceKey, endpoints);
+            listener.notify(serviceKey, newEndpoints, deletedEndpoints);
         }
     }
 

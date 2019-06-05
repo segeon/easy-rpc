@@ -2,6 +2,7 @@ package com.segeon.easyrpc.core.domain.entity;
 
 import com.google.common.base.Preconditions;
 import com.segeon.easyrpc.core.domain.invocation.client.ReferenceInvocationHandler;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,6 +10,7 @@ import lombok.ToString;
 import java.lang.reflect.Proxy;
 
 @ToString
+@EqualsAndHashCode(of = {"url", "interfaceType", "group", "version"})
 public class ReferenceConfig<T> {
     @ToString.Exclude
     private ApplicationConfig config;

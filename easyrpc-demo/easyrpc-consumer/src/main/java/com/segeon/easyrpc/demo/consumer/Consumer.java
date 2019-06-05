@@ -10,6 +10,7 @@ import com.segeon.easyrpc.demo.facade.HelloService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -17,7 +18,7 @@ public class Consumer {
     public static void main(String[] args) throws IOException {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.setName("demo-consumer");
-        applicationConfig.setPort(1122);
+        applicationConfig.setPort(1121);
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setSchema("etcd");
         registryConfig.setIp("localhost");
@@ -30,7 +31,12 @@ public class Consumer {
         int i = 0;
         Stopwatch stopwatch = Stopwatch.createStarted();
         int cnt = 3;
-        while (i < cnt) {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String s = scanner.nextLine();
+            if (s.equals("exit")) {
+                break;
+            }
             HelloRequest request = new HelloRequest();
             request.setData("msg" + i);
             request.setFrom("thh");
@@ -39,8 +45,5 @@ public class Consumer {
             log.info("response:{}", response);
             ++i;
         }
-        stopwatch.stop();
-        log.info("avg cost: {}", stopwatch.elapsed(TimeUnit.MILLISECONDS) * 1.0 / cnt);
-        System.in.read();
     }
 }

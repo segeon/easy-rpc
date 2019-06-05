@@ -15,9 +15,9 @@ public interface ChannelManager {
      */
     List<Endpoint> resolveProviders(ReferenceConfig referenceConfig);
 
-    void registerChannel(ReferenceConfig referenceConfig, Channel channel);
+    void registerAndConnectChannel(ReferenceConfig referenceConfig, Channel channel);
 
-    void registerChannel(ReferenceConfig referenceConfig, List<Channel> channels);
+    void registerAndConnectChannel(ReferenceConfig referenceConfig, List<Channel> channels);
 
     void removeChannel(Channel channel);
 

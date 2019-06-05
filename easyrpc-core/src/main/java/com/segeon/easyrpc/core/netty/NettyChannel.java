@@ -11,12 +11,14 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 @Slf4j
+@EqualsAndHashCode(of = {"ip", "port"})
 public class NettyChannel implements com.segeon.easyrpc.core.domain.entity.Channel<RPCRequest, RPCResponse> {
     private ApplicationConfig config;
     private RPCClient client;

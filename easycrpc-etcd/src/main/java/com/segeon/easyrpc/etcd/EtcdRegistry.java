@@ -114,18 +114,23 @@ public class EtcdRegistry extends AbstractServiceRegistry {
     @Override
     protected void doSubscribe(ServiceKey remotingService) {
         ByteSequence prefix = buildEtcdKeyPrefix(remotingService);
-        WatchOption watchOption = WatchOption.newBuilder().withPrefix(prefix).build();
+        WatchOption watchOption = WatchOption.newBuilder().withPrefix(prefix).withPrevKV(true).build();
         this.client.getWatchClient().watch(prefix, watchOption, new Watch.Listener() {
             @Override
             public void onNext(WatchResponse response) {
-                ArrayList<Endpoint> endpoints = new ArrayList<>(64);
+                ArrayList<Endpoint> newEndpoints = new ArrayList<>(64);
+                ArrayList<Endpoint> deletedEndpoints = new ArrayList<>(64);
                 try {
                     for (WatchEvent event : response.getEvents()) {
                         if (event.getKeyValue() != null && event.getKeyValue().getValue() != null) {
-                            endpoints.add(parseValue(event.getKeyValue().getValue()));
+                            if (event.getEventType().equals(WatchEvent.EventType.DELETE)) {
+                                deletedEndpoints.add(parseValue(event.getPrevKV().getValue()));
+                            } else {
+                                newEndpoints.add(parseValue(event.getKeyValue().getValue()));
+                            }
                         }
                     }
-                    EtcdRegistry.this.onEndpointsChange(remotingService, endpoints);
+                    EtcdRegistry.this.onEndpointsChange(remotingService, newEndpoints, deletedEndpoints);
                 } catch (Exception e) {
                     log.error("读取watch消息异常: {}", response, e);
                 }
@@ -145,7 +150,6 @@ public class EtcdRegistry extends AbstractServiceRegistry {
 
     @Override
     protected void doUnsubscribe(ServiceKey config) {
-
     }
 
     @Override
