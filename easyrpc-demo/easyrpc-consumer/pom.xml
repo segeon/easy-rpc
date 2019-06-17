@@ -24,7 +24,12 @@
         </dependency>
         <dependency>
             <groupId>com.segeon</groupId>
-            <artifactId>easycrpc-etcd</artifactId>
+            <artifactId>easyrpc-etcd</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.segeon</groupId>
+            <artifactId>easyrpc-spring</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -1,4 +1,4 @@
-package com.segeon.easyrpc.core.domain.annotation;
+package com.segeon.easyrpc.spring.annotation;
 
 import java.lang.annotation.*;
 
@@ -8,11 +8,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Target({ElementType.TYPE})
-public @interface Service {
+public @interface RpcService {
 
     Class<?> interfaceType();
 
-    String group();
+    String group() default "";
 
-    String version();
+    String version() default "";
 }

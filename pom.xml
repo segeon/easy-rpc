@@ -11,8 +11,8 @@
     <modules>
         <module>easyrpc-core</module>
         <module>easyrpc-demo</module>
-        <module>easyrpc-admin</module>
-        <module>easycrpc-etcd</module>
+        <module>easyrpc-etcd</module>
+        <module>easyrpc-spring</module>
     </modules>
 
     <build>
@@ -106,7 +106,5 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-
-
     </dependencies>
 </project>

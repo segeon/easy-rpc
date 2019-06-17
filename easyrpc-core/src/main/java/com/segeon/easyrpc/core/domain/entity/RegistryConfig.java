@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class RegistryConfig {
     /**
-     * zookeeper
+     * etcd
      */
     private String schema;
     private String ip;
